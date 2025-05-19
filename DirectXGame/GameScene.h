@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Skydome.h"
 #include <vector>
+#include "MapChipField.h"
+
 class GameScene {
 
 	KamataEngine::Model* model_ = nullptr;
@@ -22,10 +24,12 @@ class GameScene {
 	bool isDebugCameraActive_ = false;
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+	MapChipField* mapChipField_;
 
 public:
 	~GameScene();
 	void Initialize();
 	void Update();
 	void Draw();
+	void GenerateBlocks();
 };

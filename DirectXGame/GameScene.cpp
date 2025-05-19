@@ -17,6 +17,7 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete modelSkydome_;
+	delete mapChipField_;
 }
 
 void GameScene::Initialize() {
@@ -44,26 +45,29 @@ void GameScene::Initialize() {
 	const float kBlockWidth = 2.0f;
 	const float kBlockHeight = 2.0f;
 
-	worldTransformBlocks_.resize(kNumBlockVirtical);
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	}
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			if ((i + j) % 2 == 0)
-				continue;
-			worldTransformBlocks_[i][j] = new WorldTransform();
-			worldTransformBlocks_[i][j]->Initialize();
-			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-			//}
-		}
-	}
+	//worldTransformBlocks_.resize(kNumBlockVirtical);
+	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	//	worldTransformBlocks_[i].resize(kNumBlockHorizontal);
+	//}
+	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	//	for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
+	//		if ((i + j) % 2 == 0)
+	//			continue;
+	//		worldTransformBlocks_[i][j] = new WorldTransform();
+	//		worldTransformBlocks_[i][j]->Initialize();
+	//		worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+	//		worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+	//		//}
+	//	}
+	//}
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	GenerateBlocks();
 }
 
 void GameScene::Update() {
@@ -115,4 +119,15 @@ void GameScene::Draw() {
 		}
 	}
 	Model::PostDraw();
+}
+void GameScene::GenerateBlocks() {
+
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	worldTransformBlocks_.resize(GetNumBlockVirtical);
+	for (uint32_t i = 0; i < GetNumBlockVirtical; ++i) {
+		worldTransformBlocks_.resize(GetNumBlockHorizontal);
+	}
+
 }
