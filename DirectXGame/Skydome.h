@@ -2,7 +2,6 @@
 #include "KamataEngine.h"
 
 class Skydome {
-	KamataEngine::Sprite* sprite_ = nullptr;
 	KamataEngine::Camera* camera_ = nullptr;
 
 public:

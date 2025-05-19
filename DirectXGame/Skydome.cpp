@@ -1,10 +1,9 @@
 #include "Skydome.h"
 using namespace KamataEngine;
 
-void Skydome::Initialize(Model* model, uint32_t textureHandle, Camera* camera) {
+void Skydome::Initialize(Model* model, Camera* camera) {
 	assert(model);
 	model_ = model;
-	textureHandle_ = textureHandle;
 	camera_ = camera;
 	worldTransform_.Initialize();
 }

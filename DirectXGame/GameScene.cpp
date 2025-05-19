@@ -5,8 +5,6 @@ using namespace KamataEngine;
 // GameScene::~GameScene() { delete sprite_; }
 GameScene::~GameScene() {
 	delete model_;
-
-	delete sprite_;
 	delete player_;
 	delete debugCamera_;
 	// for (WorldTransform* worldTransformBlock : worldTransformBlocks_) {
@@ -27,11 +25,9 @@ void GameScene::Initialize() {
 	
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player");
-	sprite_ = Sprite::Create(modelPlayer_,{100, 50});
 	modelBlock_ = Model::CreateFromOBJ("block");
 	worldTransform_.Initialize();
 	camera_.Initialize();
-
 	// サウンドでーたの読み込み
 	soundDataHandle_ = Audio::GetInstance()->LoadWave("fanfare.wav");
 	// 音楽再生
@@ -39,7 +35,7 @@ void GameScene::Initialize() {
 	// サウンドでーたの読み込み
 	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true);
 	player_ = new Player();
-	player_->Initialize(model_, &camera_);
+	player_->Initialize(modelPlayer_, &camera_);
 	//
 	//
 	const uint32_t kNumBlockVirtical = 10;
@@ -72,13 +68,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	// ここにインゲームの更新処理を書く
-	Vector2 position = sprite_->GetPosition();
-
-	position.x += 2.0f;
-	position.y += 1.0f;
 
 	// 移動した座標をスプライトに反映
-	sprite_->SetPosition(position);
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		Audio::GetInstance()->StopWave(voiceHandle_);
 	}
@@ -114,14 +105,13 @@ void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon->GetCommandList());
 	// ここに3Dモデルインスタンスの描画処理を記述する
-	model_->Draw(worldTransform_, camera_);
 	player_->Draw();
 	skydome_->Draw();
 	for (std::vector<WorldTransform*> worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			model_->Draw(*worldTransformBlock, camera_);
+			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
 	Model::PostDraw();
