@@ -23,7 +23,7 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 	// メンバ変数への代入処理(省略)
 	// ここにインゲームの初期化処理を書く
-	
+
 	model_ = Model::Create();
 	modelPlayer_ = Model::CreateFromOBJ("player");
 	modelBlock_ = Model::CreateFromOBJ("block");
@@ -39,17 +39,17 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_, &camera_);
 	//
 	//
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
+	//const uint32_t kNumBlockVirtical = 10;
+	//const uint32_t kNumBlockHorizontal = 20;
 
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	//const float kBlockWidth = 2.0f;
+	//const float kBlockHeight = 2.0f;
 
-	//worldTransformBlocks_.resize(kNumBlockVirtical);
-	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	// worldTransformBlocks_.resize(kNumBlockVirtical);
+	// for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 	//	worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	//}
-	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	// }
+	// for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 	//	for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
 	//		if ((i + j) % 2 == 0)
 	//			continue;
@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	//		worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 	//		//}
 	//	}
-	//}
+	// }
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -125,9 +125,19 @@ void GameScene::GenerateBlocks() {
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 
-	worldTransformBlocks_.resize(GetNumBlockVirtical);
-	for (uint32_t i = 0; i < GetNumBlockVirtical; ++i) {
-		worldTransformBlocks_.resize(GetNumBlockHorizontal);
+	worldTransformBlocks_.resize(numBlockVirtical);
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(numBlockHorizontal);
+	}
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
 	}
 
 }
